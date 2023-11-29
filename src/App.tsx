@@ -1,26 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { createWeb3Modal, defaultWagmiConfig } from "@web3modal/wagmi/react"
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import { WagmiConfig } from "wagmi"
+import { arbitrum, mainnet } from "viem/chains"
+import Home from "./pages/home"
+
+// 1. Get projectId at https://cloud.walletconnect.com
+const projectId = "7d72846076e8ab9ddf698611d1b9fec7"
+
+// 2. Create wagmiConfig
+const metadata = {
+  name: "Web3Modal",
+  description: "Web3Modal Example",
+  url: "https://web3modal.com",
+  icons: ["https://avatars.githubusercontent.com/u/37784886"],
 }
 
-export default App;
+const chains = [mainnet, arbitrum]
+const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata })
+
+// 3. Create modal
+createWeb3Modal({ wagmiConfig, projectId, chains })
+
+export default function App() {
+  return (
+    <WagmiConfig config={wagmiConfig}>
+      <Home />
+    </WagmiConfig>
+  )
+}
